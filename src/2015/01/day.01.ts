@@ -7,7 +7,11 @@ function parseInput() {
     .readFileSync("src/inputs/2015/01/day.01.input.txt")
     .toString()
     .split("")
-    .map((x) => (x === "(" ? 1 : -1));
+    .map(parseInstruction);
+}
+
+function parseInstruction(value: string) {
+  return value === "(" ? 1 : -1;
 }
 
 export function part1() {
