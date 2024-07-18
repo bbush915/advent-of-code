@@ -52,10 +52,20 @@ export function part2() {
   const instructions = parseInput();
   const locations = new Set([toKey([0, 0])]);
 
-  const santaInstructions = instructions.filter((_, i) => i % 2 === 0);
-  visitUniqueLocations(santaInstructions, locations);
+  const santaInstructions: number[][] = [];
+  const roboSantaInstructions: number[][] = [];
 
-  const roboSantaInstructions = instructions.filter((_, i) => i % 2 === 1);
+  for (let i = 0; i < instructions.length; i++) {
+    const instruction = instructions[i];
+
+    if (i % 2 === 0) {
+      santaInstructions.push(instruction);
+    } else {
+      roboSantaInstructions.push(instruction);
+    }
+  }
+
+  visitUniqueLocations(santaInstructions, locations);
   visitUniqueLocations(roboSantaInstructions, locations);
 
   return locations.size;

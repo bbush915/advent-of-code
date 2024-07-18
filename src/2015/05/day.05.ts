@@ -5,8 +5,7 @@ function parseInput() {
     .readFileSync("src/inputs/2015/05/day.05.input.txt")
     .toString()
     .split("\n")
-    .filter((x) => x)
-    .map((x) => x);
+    .filter((x) => x);
 }
 
 export function part1() {
@@ -21,7 +20,7 @@ export function part1() {
 
     // NOTE - Must contain a double letter.
 
-    if (!string.match(/([a-z])\1/)) {
+    if (!string.match(/(.)\1/)) {
       return false;
     }
 
@@ -41,13 +40,13 @@ export function part2() {
   return strings.filter((string) => {
     // NOTE - Must contain a pair of letters appearing twice without overlapping.
 
-    if (!string.match(/([a-z]{2}).*\1/)) {
+    if (!string.match(/(.{2}).*\1/)) {
       return false;
     }
 
     // NOTE - Must contain a letter that repeats with exactly one letter between them.
 
-    if (!string.match(/([a-z]).\1/)) {
+    if (!string.match(/(.).\1/)) {
       return false;
     }
 

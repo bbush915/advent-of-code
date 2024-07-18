@@ -2,6 +2,11 @@ import fs from "fs";
 
 import "@/utils/array";
 
+enum Instructions {
+  UP = "(",
+  DOWN = ")",
+}
+
 function parseInput() {
   return fs
     .readFileSync("src/inputs/2015/01/day.01.input.txt")
@@ -11,7 +16,19 @@ function parseInput() {
 }
 
 function parseInstruction(value: string) {
-  return value === "(" ? 1 : -1;
+  switch (value) {
+    case Instructions.UP: {
+      return 1;
+    }
+
+    case Instructions.DOWN: {
+      return -1;
+    }
+
+    default: {
+      throw new Error("Unexpected instruction!");
+    }
+  }
 }
 
 export function part1() {

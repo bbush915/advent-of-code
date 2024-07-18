@@ -10,18 +10,22 @@ function parseInput() {
 
 export function part1() {
   const secretKey = parseInput();
+
   return mine(secretKey, 5);
 }
 
 export function part2() {
   const secretKey = parseInput();
+
   return mine(secretKey, 6);
 }
 
 function mine(secretKey: string, leadingZeroCount: number) {
   const leadingString = "0".repeat(leadingZeroCount);
 
-  for (let i = 1; i < Number.MAX_SAFE_INTEGER; i++) {
+  let i = 1;
+
+  while (1) {
     const hash = crypto
       .createHash("md5")
       .update(`${secretKey}${i}`)
@@ -30,5 +34,7 @@ function mine(secretKey: string, leadingZeroCount: number) {
     if (hash.startsWith(leadingString)) {
       return i;
     }
+
+    i++;
   }
 }
