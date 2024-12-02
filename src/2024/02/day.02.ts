@@ -12,11 +12,11 @@ function parseInput() {
 }
 
 export function part1() {
-  return parseInput().filter((x) => isSafe(x)).length;
+  return parseInput().filter(isSafe).length;
 }
 
 export function part2() {
-  return parseInput().filter((x) => isSafeWithSingleRemoval(x)).length;
+  return parseInput().filter(isSafeWithSingleRemoval).length;
 }
 
 function isSafe(report: number[]) {
@@ -28,13 +28,13 @@ function isSafe(report: number[]) {
 
   // NOTE - Adjacent levels must differ by at least one and at most three.
 
-  if (differences.some((x) => !x || Math.abs(x) > 3)) {
+  if (differences.some((x) => Math.abs(x) < 1 || Math.abs(x) > 3)) {
     return false;
   }
 
   // NOTE - Levels must be either all increasing or all decreasing.
 
-  if (new Set<number>(differences.map((x) => Math.sign(x))).size > 1) {
+  if (new Set(differences.map(Math.sign)).size > 1) {
     return false;
   }
 

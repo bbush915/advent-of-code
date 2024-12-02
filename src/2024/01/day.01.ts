@@ -53,7 +53,8 @@ function sortList(list: number[]) {
 
 function getListCountLookup(list: number[]) {
   return list.reduce((lookup, value) => {
-    const count = lookup.get(value);
-    return lookup.set(value, (count ?? 0) + 1);
+    const count = lookup.get(value) ?? 0;
+
+    return lookup.set(value, count + 1);
   }, new Map<number, number>());
 }
