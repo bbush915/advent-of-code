@@ -3,12 +3,7 @@ import fs from "fs";
 import "@/utils/array";
 
 function parseInput() {
-  return fs
-    .readFileSync("src/inputs/2024/03/day.03.input.txt")
-    .toString()
-    .split("\n")
-    .filter((x) => x)
-    .join("");
+  return fs.readFileSync("src/inputs/2024/03/day.03.input.txt").toString();
 }
 
 export function part1() {
