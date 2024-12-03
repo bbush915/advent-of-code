@@ -15,19 +15,10 @@ export function part1() {
 export function part2() {
   const memory = parseInput();
 
-  const dontSections = memory.split("don't()");
-
-  let total = getMultiplicationResults(dontSections[0]);
-
-  for (const dontSection of dontSections.slice(1)) {
-    const doSections = dontSection.split("do()");
-
-    for (const doSection of doSections.slice(1)) {
-      total += getMultiplicationResults(doSection);
-    }
-  }
-
-  return total;
+  return memory
+    .split("do()")
+    .map((x) => getMultiplicationResults(x.split("don't()")[0]))
+    .sum();
 }
 
 function getMultiplicationResults(section: string) {

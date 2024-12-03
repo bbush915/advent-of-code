@@ -28,7 +28,7 @@ function isSafe(report: number[]) {
 
   // NOTE - Adjacent levels must differ by at least one and at most three.
 
-  if (differences.some((x) => Math.abs(x) < 1 || Math.abs(x) > 3)) {
+  if (differences.some((x) => x === 0 || Math.abs(x) > 3)) {
     return false;
   }
 
