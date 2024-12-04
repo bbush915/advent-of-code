@@ -1,54 +1,14 @@
 import fs from "fs";
 
 const DIRECTIONS = [
-  [
-    [0, 0],
-    [-1, 0],
-    [-2, 0],
-    [-3, 0],
-  ],
-  [
-    [0, 0],
-    [-1, 1],
-    [-2, 2],
-    [-3, 3],
-  ],
-  [
-    [0, 0],
-    [0, 1],
-    [0, 2],
-    [0, 3],
-  ],
-  [
-    [0, 0],
-    [1, 1],
-    [2, 2],
-    [3, 3],
-  ],
-  [
-    [0, 0],
-    [1, 0],
-    [2, 0],
-    [3, 0],
-  ],
-  [
-    [0, 0],
-    [1, -1],
-    [2, -2],
-    [3, -3],
-  ],
-  [
-    [0, 0],
-    [0, -1],
-    [0, -2],
-    [0, -3],
-  ],
-  [
-    [0, 0],
-    [-1, -1],
-    [-2, -2],
-    [-3, -3],
-  ],
+  [-1, 0],
+  [-1, 1],
+  [0, 1],
+  [1, 1],
+  [1, 0],
+  [1, -1],
+  [0, -1],
+  [-1, -1],
 ];
 
 function parseInput() {
@@ -67,16 +27,18 @@ export function part1() {
 
   for (let i = 0; i < letters.length; i++) {
     for (let j = 0; j < letters[i].length; j++) {
-      for (const direction of DIRECTIONS) {
-        let word = "";
+      if (letters[i][j] !== "X") {
+        continue;
+      }
 
-        for (const [di, dj] of direction) {
-          word += letters[i + di]?.[j + dj] ?? ".";
+      direction: for (const [di, dj] of DIRECTIONS) {
+        for (let k = 1; k < 4; k++) {
+          if (letters[i + k * di]?.[j + k * dj] !== "XMAS"[k]) {
+            continue direction;
+          }
         }
 
-        if (word === "XMAS") {
-          count++;
-        }
+        count++;
       }
     }
   }
