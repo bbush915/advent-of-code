@@ -10,6 +10,7 @@ describe("$$YEAR$$ Day $$DAY$$", function () {
   describe("Part 1", function () {
     // it("should calculate the correct answer for the first example", function () {
     //   const input = fs.readFileSync("./src/inputs/$$YEAR$$/$$DAY$$/day.$$DAY$$.example.01.txt");
+
     //   jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
 
     //   const answer = part1();
@@ -19,6 +20,7 @@ describe("$$YEAR$$ Day $$DAY$$", function () {
 
     it("should calculate the correct answer for the challenge", function () {
       const answer = part1();
+
       expect(answer).toBe(0);
     });
   });
@@ -26,6 +28,7 @@ describe("$$YEAR$$ Day $$DAY$$", function () {
   describe("Part 2", function () {
     // it("should calculate the correct answer for the first example", function () {
     //   const input = fs.readFileSync("./src/inputs/$$YEAR$$/$$DAY$$/day.$$DAY$$.example.01.txt");
+
     //   jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
 
     //   const answer = part2();
@@ -35,6 +38,7 @@ describe("$$YEAR$$ Day $$DAY$$", function () {
 
     it("should calculate the correct answer for the challenge", function () {
       const answer = part2();
+      
       expect(answer).toBe(0);
     });
   });
