@@ -1,7 +1,5 @@
 import fs from "fs";
 
-import "@/utils/array";
-
 function parseInput() {
   const map = fs
     .readFileSync("src/inputs/2024/08/day.08.input.txt")
@@ -37,8 +35,6 @@ export function part1() {
   const antinodes = new Set<string>();
 
   for (const [, locations] of antennae) {
-    const locationLookup = locations.toLookup((x) => toKey(x[0], x[1]));
-
     for (let n = 0; n < locations.length; n++) {
       for (let m = n + 1; m < locations.length; m++) {
         const di = locations[m][0] - locations[n][0];
@@ -51,7 +47,7 @@ export function part1() {
 
         const antinode1 = toKey(i1, j1);
 
-        if (!locationLookup.has(antinode1) && map[i1]?.[j1]) {
+        if (map[i1]?.[j1]) {
           antinodes.add(antinode1);
         }
 
@@ -62,7 +58,7 @@ export function part1() {
 
         const antinode2 = toKey(i2, j2);
 
-        if (!locationLookup.has(antinode2) && map[i2]?.[j2]) {
+        if (map[i2]?.[j2]) {
           antinodes.add(antinode2);
         }
       }
