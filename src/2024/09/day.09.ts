@@ -27,7 +27,7 @@ export function part1() {
   let freeSpaceIndex = disk.findIndex((x) => x < 0);
 
   while (freeSpaceIndex < disk.length) {
-    disk.splice(freeSpaceIndex, 1, disk.pop()!);
+    disk[freeSpaceIndex] = disk.pop()!;
 
     while (disk[freeSpaceIndex] >= 0) {
       freeSpaceIndex++;
