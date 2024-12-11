@@ -19,56 +19,55 @@ export function part2() {
 }
 
 function getStoneCount(blinks: number) {
-  const stoneCountLookup = new Map<number, Map<number, number>>();
+  const lookup = new Map<string, number>();
 
   return parseInput()
-    .map((stone) => blink(stone, 0, blinks, stoneCountLookup))
+    .map((stone) => blink(stone, blinks, lookup))
     .sum();
 }
 
 function blink(
   stone: number,
-  curBlink: number,
-  maxBlink: number,
-  stoneCountLookup: Map<number, Map<number, number>>
+  remainingBlinks: number,
+  lookup: Map<string, number>
 ): number {
-  if (curBlink === maxBlink) {
+  if (!remainingBlinks) {
     return 1;
   }
 
-  if (!stoneCountLookup.has(stone)) {
-    stoneCountLookup.set(stone, new Map<number, number>());
-  }
+  const key = toKey(stone, remainingBlinks);
 
-  let count = stoneCountLookup.get(stone)!.get(maxBlink - curBlink);
+  let count = lookup.get(key);
 
   if (count) {
     return count;
   }
 
   if (!stone) {
-    count = blink(1, curBlink + 1, maxBlink, stoneCountLookup);
+    count = blink(1, remainingBlinks - 1, lookup);
   } else if (Math.floor(Math.log10(stone)) % 2) {
     const stone_ = stone.toString();
 
     count =
       blink(
         Number(stone_.slice(0, stone_.length / 2)),
-        curBlink + 1,
-        maxBlink,
-        stoneCountLookup
+        remainingBlinks - 1,
+        lookup
       ) +
       blink(
         Number(stone_.slice(stone_.length / 2)),
-        curBlink + 1,
-        maxBlink,
-        stoneCountLookup
+        remainingBlinks - 1,
+        lookup
       );
   } else {
-    count = blink(stone * 2024, curBlink + 1, maxBlink, stoneCountLookup);
+    count = blink(stone * 2024, remainingBlinks - 1, lookup);
   }
 
-  stoneCountLookup.get(stone)!.set(maxBlink - curBlink, count);
+  lookup.set(key, count);
 
   return count;
+}
+
+function toKey(stone: number, remainingBlinks: number) {
+  return `${stone}|${remainingBlinks}`;
 }
