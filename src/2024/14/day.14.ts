@@ -109,6 +109,4 @@ function displayBathroom(robots: Robot[]) {
   for (const line of picture) {
     console.log(line.join(""));
   }
-
-  console.log("\n");
 }
