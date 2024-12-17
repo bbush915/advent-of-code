@@ -1,5 +1,8 @@
 import fs from "fs";
 
+import { toKey } from "@/utils/common";
+import { MinPriorityQueue } from "@/utils/data-structure";
+
 enum Tiles {
   WALL = "#",
   EMPTY = ".",
@@ -21,9 +24,6 @@ const DELTA_MAP = {
   [Directions.WEST]: [0, -1],
 };
 
-type Path1 = [number, number, Directions, number];
-type Path2 = [number, number, Directions, number, string[]];
-
 function parseInput() {
   const maze = fs
     .readFileSync("src/inputs/2024/16/day.16.input.txt")
@@ -32,162 +32,129 @@ function parseInput() {
     .filter((x) => x)
     .map((x) => x.split("") as Tiles[]);
 
-  const start: number[] = [];
+  let start: string;
+  let end: string;
 
   for (let i = 0; i < maze.length; i++) {
     for (let j = 0; j < maze[i].length; j++) {
       if (maze[i][j] === Tiles.START) {
-        start.push(i, j);
+        start = toKey(i, j, Directions.EAST);
+      } else if (maze[i][j] === Tiles.END) {
+        end = toKey(i, j);
       }
     }
   }
 
+  const { scoreLookup, predecessorLookup } = search(maze, start!, end!);
+
   return {
-    maze,
-    start,
+    scoreLookup,
+    predecessorLookup,
+    end: end!,
   };
 }
 
 export function part1() {
-  const { maze, start } = parseInput();
+  const { scoreLookup, end } = parseInput();
 
-  let lowestScore = Number.POSITIVE_INFINITY;
-
-  const paths: Path1[] = [[start[0], start[1], Directions.EAST, 0]];
-  const scoreLookup = new Map<string, number>();
-
-  while (paths.length) {
-    const path = paths.pop()!;
-
-    const [, , direction, score] = path;
-    let [i, j] = path;
-
-    const key = toKey(i, j, direction);
-
-    if (score >= (scoreLookup.get(key) ?? Number.POSITIVE_INFINITY)) {
-      continue;
-    } else {
-      scoreLookup.set(key, score);
-    }
-
-    if (score >= lowestScore) {
-      continue;
-    }
-
-    if (maze[i][j] === Tiles.END) {
-      if (score < lowestScore) {
-        lowestScore = score;
-      }
-
-      continue;
-    }
-
-    // NOTE - Rotate
-
-    const clockwiseDirection = (direction + 1) % 4;
-
-    if (getNextTile(maze, i, j, clockwiseDirection) !== Tiles.WALL) {
-      paths.push([i, j, clockwiseDirection, score + 1_000]);
-    }
-
-    const counterclockwiseDirection = (direction + 3) % 4;
-
-    if (getNextTile(maze, i, j, counterclockwiseDirection) !== Tiles.WALL) {
-      paths.push([i, j, counterclockwiseDirection, score + 1_000]);
-    }
-
-    // NOTE - Move
-
-    i += DELTA_MAP[direction][0];
-    j += DELTA_MAP[direction][1];
-
-    if (maze[i][j] !== Tiles.WALL) {
-      paths.push([i, j, direction, score + 1]);
-    }
-  }
-
-  return lowestScore;
+  return Math.min(
+    ...[...scoreLookup.entries()]
+      .filter(([key]) => key.startsWith(end))
+      .map(([, score]) => score)
+  );
 }
 
 export function part2(lowestScore = 85_420) {
-  const { maze, start } = parseInput();
+  const { scoreLookup, predecessorLookup, end } = parseInput();
 
-  const paths: Path2[] = [
-    [start[0], start[1], Directions.EAST, 0, [toKey(...start)]],
-  ];
-
-  const scoreLookup = new Map<string, number>();
   const tileLookup = new Set<string>();
 
-  while (paths.length) {
-    const path = paths.pop()!;
+  const keys: string[] = [...scoreLookup.entries()]
+    .filter(([key, score]) => key.startsWith(end) && score === lowestScore)
+    .map(([key]) => key);
 
-    const [, , direction, score, tiles] = path;
-    let [i, j] = path;
+  while (keys.length) {
+    const key = keys.pop()!;
 
-    if (maze[i][j] === Tiles.END) {
-      if (score === lowestScore) {
-        for (const tile of tiles) {
-          tileLookup.add(tile);
-        }
-      }
+    tileLookup.add(key.slice(0, key.lastIndexOf("|")));
 
-      continue;
-    }
-
-    const key = toKey(i, j, direction);
-
-    if (score > (scoreLookup.get(key) ?? Number.POSITIVE_INFINITY)) {
-      continue;
-    } else {
-      scoreLookup.set(key, score);
-    }
-
-    if (score > lowestScore) {
-      continue;
-    }
-
-    // NOTE - Rotate
-
-    const clockwiseDirection = (direction + 1) % 4;
-
-    if (getNextTile(maze, i, j, clockwiseDirection) !== Tiles.WALL) {
-      paths.push([
-        i,
-        j,
-        clockwiseDirection,
-        score + 1_000,
-        [...tiles, toKey(i, j)],
-      ]);
-    }
-
-    const counterclockwiseDirection = (direction + 3) % 4;
-
-    if (getNextTile(maze, i, j, counterclockwiseDirection) !== Tiles.WALL) {
-      paths.push([
-        i,
-        j,
-        counterclockwiseDirection,
-        score + 1_000,
-        [...tiles, toKey(i, j)],
-      ]);
-    }
-
-    // NOTE - Move
-
-    i += DELTA_MAP[direction][0];
-    j += DELTA_MAP[direction][1];
-
-    if (maze[i][j] !== Tiles.WALL) {
-      paths.push([i, j, direction, score + 1, [...tiles, toKey(i, j)]]);
+    for (const predecessor of predecessorLookup.get(key)!) {
+      keys.push(predecessor);
     }
   }
 
   return tileLookup.size;
 }
 
-function toKey(...args: any[]) {
-  return args.map(String).join("|");
+function search(maze: Tiles[][], start: string, end: string) {
+  const scoreLookup = new Map<string, number>([[start, 0]]);
+  const predecessorLookup = new Map<string, string[]>([[start, []]]);
+
+  const priorityQueue = new MinPriorityQueue();
+  priorityQueue.insert(start, 0);
+
+  while (priorityQueue.size) {
+    const { key } = priorityQueue.pop()!;
+
+    if (key.startsWith(end)) {
+      continue;
+    }
+
+    for (const neighborKey of getNeighbors(maze, key)) {
+      const newScore = scoreLookup.get(key)! + getDistance(key, neighborKey);
+      const oldScore = scoreLookup.get(neighborKey) ?? Number.POSITIVE_INFINITY;
+
+      if (newScore === oldScore) {
+        const predecessors = predecessorLookup.get(neighborKey) ?? [];
+
+        if (!predecessors.includes(key)) {
+          predecessors.push(key);
+          predecessorLookup.set(neighborKey, predecessors);
+        }
+      } else if (newScore < oldScore) {
+        scoreLookup.set(neighborKey, newScore);
+        predecessorLookup.set(neighborKey, [key]);
+
+        if (priorityQueue.includes(neighborKey)) {
+          priorityQueue.update(neighborKey, newScore);
+        } else {
+          priorityQueue.insert(neighborKey, newScore);
+        }
+      }
+    }
+  }
+
+  return { scoreLookup, predecessorLookup };
+}
+
+function getNeighbors(maze: Tiles[][], key: string) {
+  const [i, j, direction] = fromKey(key);
+
+  const neighbors: string[] = [];
+
+  // NOTE - Rotate
+
+  const clockwiseDirection = (direction + 1) % 4;
+
+  if (getNextTile(maze, i, j, clockwiseDirection) !== Tiles.WALL) {
+    neighbors.push(toKey(i, j, clockwiseDirection));
+  }
+
+  const counterclockwiseDirection = (direction + 3) % 4;
+
+  if (getNextTile(maze, i, j, counterclockwiseDirection) !== Tiles.WALL) {
+    neighbors.push(toKey(i, j, counterclockwiseDirection));
+  }
+
+  // NOTE - Move
+
+  if (getNextTile(maze, i, j, direction) !== Tiles.WALL) {
+    neighbors.push(
+      toKey(i + DELTA_MAP[direction][0], j + DELTA_MAP[direction][1], direction)
+    );
+  }
+
+  return neighbors;
 }
 
 function getNextTile(
@@ -200,4 +167,15 @@ function getNextTile(
   j += DELTA_MAP[direction][1];
 
   return maze[i][j];
+}
+
+function getDistance(x: string, y: string) {
+  const [i1, j1] = fromKey(x);
+  const [i2, j2] = fromKey(y);
+
+  return i1 === i2 && j1 === j2 ? 1_000 : 1;
+}
+
+function fromKey(key: string) {
+  return key.split("|").map(Number) as [number, number, Directions];
 }

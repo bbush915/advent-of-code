@@ -5,7 +5,7 @@
       "name": "Debug",
       "type": "node",
       "request": "launch",
-      "args": ["scripts/run-day", "--part", "2"],
+      "args": ["scripts/run-day"],
       "runtimeArgs": [
         "--nolazy",
         "-r",

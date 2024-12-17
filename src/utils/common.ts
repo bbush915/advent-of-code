@@ -10,6 +10,16 @@ export function clone<T>(obj: T): T {
 }
 
 /**
+ * Generates a unique key from the given arguments.
+ *
+ * @param args The components of the key.
+ * @returns The unique key.
+ */
+export function toKey(...args: any[]) {
+  return args.map((x) => JSON.stringify(x)).join("|");
+}
+
+/**
  * Memoizes a function
  *
  * @param {any} func The function.
