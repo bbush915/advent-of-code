@@ -188,7 +188,7 @@ function getComboOperand(registers: number[], operand: Operands) {
     }
 
     case Operands.RESERVED: {
-      throw new Error("Resever");
+      throw new Error("Reserved!");
     }
   }
 }
