@@ -1,6 +1,7 @@
 import fs from "fs";
 
 import "@/utils/array";
+import { toKey } from "@/utils/common";
 
 function parseInput() {
   return fs
@@ -35,7 +36,7 @@ function blink(
     return 1;
   }
 
-  const key = toKey(stone, remainingBlinks);
+  const key = toKey([stone, remainingBlinks]);
 
   let count = lookup.get(key);
 
@@ -66,8 +67,4 @@ function blink(
   lookup.set(key, count);
 
   return count;
-}
-
-function toKey(stone: number, remainingBlinks: number) {
-  return `${stone}|${remainingBlinks}`;
 }

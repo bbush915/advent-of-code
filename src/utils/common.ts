@@ -15,8 +15,8 @@ export function clone<T>(obj: T): T {
  * @param args The components of the key.
  * @returns The unique key.
  */
-export function toKey(...args: any[]) {
-  return args.map((x) => JSON.stringify(x)).join("|");
+export function toKey(components: any[], delimiter = "|") {
+  return components.map((x) => JSON.stringify(x)).join(delimiter);
 }
 
 /**

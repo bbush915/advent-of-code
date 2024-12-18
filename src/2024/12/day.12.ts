@@ -1,6 +1,7 @@
 import fs from "fs";
 
 import "@/utils/array";
+import { toKey } from "@/utils/common";
 
 type Map = string[][];
 
@@ -35,7 +36,7 @@ function getTotalPrice(calculatePrice: (map: Map, region: Region) => number) {
 
   for (let i = 0; i < map.length; i++) {
     for (let j = 0; j < map[i].length; j++) {
-      const plot = toKey(i, j);
+      const plot = toKey([i, j]);
 
       if (visited.has(plot)) {
         continue;
@@ -70,28 +71,28 @@ function getTotalPrice(calculatePrice: (map: Map, region: Region) => number) {
         // NOTE - Top
 
         if (m > 0 && map[m - 1][n] === map[i][j]) {
-          plots.push(toKey(m - 1, n));
+          plots.push(toKey([m - 1, n]));
           edges[0] = [];
         }
 
         // NOTE - Right
 
         if (n < map[m].length - 1 && map[m][n + 1] === map[i][j]) {
-          plots.push(toKey(m, n + 1));
+          plots.push(toKey([m, n + 1]));
           edges[1] = [];
         }
 
         // NOTE - Bottom
 
         if (m < map.length - 1 && map[m + 1][n] === map[i][j]) {
-          plots.push(toKey(m + 1, n));
+          plots.push(toKey([m + 1, n]));
           edges[2] = [];
         }
 
         // NOTE - Left
 
         if (n > 0 && map[m][n - 1] === map[i][j]) {
-          plots.push(toKey(m, n - 1));
+          plots.push(toKey([m, n - 1]));
           edges[3] = [];
         }
 
@@ -126,19 +127,19 @@ function calculateDiscountedPrice(map: Map, { plots, edges }: Region) {
 
       for (let n = 0; n < horizontalEdges.length - 1; n++) {
         const tl = plotLookup.has(
-          toKey(horizontalEdges[n][0] - 1, horizontalEdges[n][1])
+          toKey([horizontalEdges[n][0] - 1, horizontalEdges[n][1]])
         );
 
         const tr = plotLookup.has(
-          toKey(horizontalEdges[n + 1][0] - 1, horizontalEdges[n + 1][1])
+          toKey([horizontalEdges[n + 1][0] - 1, horizontalEdges[n + 1][1]])
         );
 
         const bl = plotLookup.has(
-          toKey(horizontalEdges[n][0], horizontalEdges[n][1])
+          toKey([horizontalEdges[n][0], horizontalEdges[n][1]])
         );
 
         const br = plotLookup.has(
-          toKey(horizontalEdges[n + 1][0], horizontalEdges[n + 1][1])
+          toKey([horizontalEdges[n + 1][0], horizontalEdges[n + 1][1]])
         );
 
         if (
@@ -163,19 +164,19 @@ function calculateDiscountedPrice(map: Map, { plots, edges }: Region) {
 
       for (let n = 0; n < verticalEdges.length - 1; n++) {
         const tl = plotLookup.has(
-          toKey(verticalEdges[n][0], verticalEdges[n][1] - 1)
+          toKey([verticalEdges[n][0], verticalEdges[n][1] - 1])
         );
 
         const bl = plotLookup.has(
-          toKey(verticalEdges[n + 1][0], verticalEdges[n + 1][1] - 1)
+          toKey([verticalEdges[n + 1][0], verticalEdges[n + 1][1] - 1])
         );
 
         const tr = plotLookup.has(
-          toKey(verticalEdges[n][0], verticalEdges[n][1])
+          toKey([verticalEdges[n][0], verticalEdges[n][1]])
         );
 
         const br = plotLookup.has(
-          toKey(verticalEdges[n + 1][0], verticalEdges[n + 1][1])
+          toKey([verticalEdges[n + 1][0], verticalEdges[n + 1][1]])
         );
 
         if (
@@ -189,10 +190,6 @@ function calculateDiscountedPrice(map: Map, { plots, edges }: Region) {
   }
 
   return plots.length * sides;
-}
-
-function toKey(i: number, j: number) {
-  return `${i}|${j}`;
 }
 
 function fromKey(key: string) {

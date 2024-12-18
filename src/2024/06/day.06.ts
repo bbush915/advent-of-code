@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { clone } from "@/utils/common";
+import { clone, toKey } from "@/utils/common";
 
 enum Directions {
   UP,
@@ -75,7 +75,7 @@ function tryPatrol(map: string[][], guard: number[]): [Set<string>, boolean] {
   let didLoop = false;
 
   patrolLoop: while (i >= 0 && i < map.length && j >= 0 && j < map[i].length) {
-    const key = toKey(i, j, facing);
+    const key = toKey([i, j, facing]);
 
     if (history.has(key)) {
       didLoop = true;
@@ -143,10 +143,6 @@ function tryPatrol(map: string[][], guard: number[]): [Set<string>, boolean] {
     new Set([...history.values()].map((x) => fromKey(x).slice(0, 2).join("|"))),
     didLoop,
   ];
-}
-
-function toKey(i: number, j: number, facing: Directions) {
-  return `${i}|${j}|${facing}`;
 }
 
 function fromKey(key: string) {

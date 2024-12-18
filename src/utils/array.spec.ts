@@ -1,4 +1,4 @@
-import { cartesian, isArray, range } from "./array";
+import { cartesian, isArray, lowerBound, range, upperBound } from "./array";
 
 describe("utils", function () {
   describe("array", function () {
@@ -137,6 +137,18 @@ describe("utils", function () {
           [2, 4, 5],
           [2, 4, 6],
         ]);
+      });
+    });
+
+    describe("lowerBound", function () {
+      it("should return the lower bound", function () {
+        expect(lowerBound([1, 2, 2, 2, 3, 3], (x) => x < 3)).toBe(3);
+      });
+    });
+
+    describe("upperBound", function () {
+      it("should return the upper bound", function () {
+        expect(upperBound([1, 2, 2, 2, 3, 3], (x) => x < 3)).toBe(4);
       });
     });
   });

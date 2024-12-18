@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { toKey } from "@/utils/common";
+import { upperBound } from "@/utils/array";
 import { search } from "@/utils/graph";
 
 function parseInput() {
@@ -8,8 +8,7 @@ function parseInput() {
     .readFileSync("src/inputs/2024/18/day.18.input.txt")
     .toString()
     .split("\n")
-    .filter((x) => x)
-    .map((x) => toKey(...x.split(",").map(Number)));
+    .filter((x) => x);
 }
 
 export function part1(width = 70, height = 70, n = 1_024) {
@@ -18,14 +17,15 @@ export function part1(width = 70, height = 70, n = 1_024) {
   return getPath(width, height, bytes);
 }
 
-export function part2(width = 70, height = 70, n = 1_024) {
+export function part2(width = 70, height = 70) {
   const bytes = parseInput();
 
-  for (let i = n; i < bytes.length; i++) {
-    if (!getPath(width, height, bytes.slice(0, i))) {
-      return bytes[i - 1].split("|").join(",");
-    }
-  }
+  return bytes[
+    upperBound(
+      bytes,
+      (_byte, i) => !!getPath(width, height, bytes.slice(0, i + 1))
+    )
+  ];
 }
 
 function getPath(width: number, height: number, bytes: string[]) {
@@ -44,15 +44,9 @@ function getPath(width: number, height: number, bytes: string[]) {
         [j + 1, i],
         [j, i + 1],
       ]
-        .filter(
-          ([j, i]) =>
-            j >= 0 &&
-            j <= width &&
-            i >= 0 &&
-            i <= height &&
-            !byteLookup.has(toKey(j, i))
-        )
-        .map(([j, i]) => toKey(j, i));
+        .filter(([j, i]) => j >= 0 && j <= width && i >= 0 && i <= height)
+        .map(([j, i]) => toKey(j, i))
+        .filter((key) => !byteLookup.has(key));
     },
     source,
     target
@@ -61,6 +55,10 @@ function getPath(width: number, height: number, bytes: string[]) {
   return distanceLookup.get(target);
 }
 
+function toKey(j: number, i: number) {
+  return `${j},${i}`;
+}
+
 function fromKey(key: string) {
-  return key.split("|").map(Number);
+  return key.split(",").map(Number);
 }

@@ -35,7 +35,7 @@ describe("2024 Day 18", function () {
 
       jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
 
-      const answer = part2(6, 6, 12);
+      const answer = part2(6, 6);
 
       expect(answer).toBe("6,1");
     });

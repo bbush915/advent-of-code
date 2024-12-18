@@ -38,9 +38,9 @@ function parseInput() {
   for (let i = 0; i < maze.length; i++) {
     for (let j = 0; j < maze[i].length; j++) {
       if (maze[i][j] === Tiles.START) {
-        start = toKey(i, j, Directions.EAST);
+        start = toKey([i, j, Directions.EAST]);
       } else if (maze[i][j] === Tiles.END) {
-        end = toKey(i, j);
+        end = toKey([i, j]);
       }
     }
   }
@@ -137,20 +137,24 @@ function getNeighbors(maze: Tiles[][], key: string) {
   const clockwiseDirection = (direction + 1) % 4;
 
   if (getNextTile(maze, i, j, clockwiseDirection) !== Tiles.WALL) {
-    neighbors.push(toKey(i, j, clockwiseDirection));
+    neighbors.push(toKey([i, j, clockwiseDirection]));
   }
 
   const counterclockwiseDirection = (direction + 3) % 4;
 
   if (getNextTile(maze, i, j, counterclockwiseDirection) !== Tiles.WALL) {
-    neighbors.push(toKey(i, j, counterclockwiseDirection));
+    neighbors.push(toKey([i, j, counterclockwiseDirection]));
   }
 
   // NOTE - Move
 
   if (getNextTile(maze, i, j, direction) !== Tiles.WALL) {
     neighbors.push(
-      toKey(i + DELTA_MAP[direction][0], j + DELTA_MAP[direction][1], direction)
+      toKey([
+        i + DELTA_MAP[direction][0],
+        j + DELTA_MAP[direction][1],
+        direction,
+      ])
     );
   }
 

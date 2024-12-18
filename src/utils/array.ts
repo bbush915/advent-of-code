@@ -102,3 +102,57 @@ export function cartesian<T>(...arrays: T[][]): T[][] {
     [[]] as T[][]
   );
 }
+
+/**
+ * Gets the index of of the last element which satisfies the given predicate.
+ *
+ * @param array The array.
+ * @param predicate The predicate.
+ * @returns The index of the last element which satisfies the predicate.
+ */
+export function lowerBound<T>(
+  array: T[],
+  predicate: (x: T, i: number) => boolean
+) {
+  let lo = 0;
+  let hi = array.length - 1;
+
+  while (lo <= hi) {
+    const midpoint = lo + Math.floor((hi - lo) / 2);
+
+    if (predicate(array[midpoint], midpoint)) {
+      lo = midpoint + 1;
+    } else {
+      hi = midpoint - 1;
+    }
+  }
+
+  return hi ?? -1;
+}
+
+/**
+ * Gets the index of of the first element which does not satisfy the given predicate.
+ *
+ * @param array The array.
+ * @param predicate The predicate.
+ * @returns The index of the first element which does not satisfy the predicate.
+ */
+export function upperBound<T>(
+  array: T[],
+  predicate: (x: T, i: number) => boolean
+) {
+  let lo = 0;
+  let hi = array.length - 1;
+
+  while (lo <= hi) {
+    const midpoint = lo + Math.floor((hi - lo) / 2);
+
+    if (predicate(array[midpoint], midpoint)) {
+      lo = midpoint + 1;
+    } else {
+      hi = midpoint - 1;
+    }
+  }
+
+  return lo ?? -1;
+}

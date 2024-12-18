@@ -1,5 +1,7 @@
 import fs from "fs";
 
+import { toKey } from "@/utils/common";
+
 function parseInput() {
   return fs
     .readFileSync("src/inputs/2024/10/day.10.input.txt")
@@ -63,7 +65,7 @@ function calculateTrailheadValue(
 
   while (positions.length) {
     const [i, j] = positions.shift()!;
-    const key = toKey(i, j);
+    const key = toKey([i, j]);
 
     if (!distinct && visited.has(key)) {
       continue;
@@ -94,8 +96,4 @@ function calculateTrailheadValue(
   }
 
   return value;
-}
-
-function toKey(i: number, j: number) {
-  return `${i}|${j}`;
 }

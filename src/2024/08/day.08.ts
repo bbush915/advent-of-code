@@ -1,5 +1,7 @@
 import fs from "fs";
 
+import { toKey } from "@/utils/common";
+
 function parseInput() {
   const map = fs
     .readFileSync("src/inputs/2024/08/day.08.input.txt")
@@ -45,7 +47,7 @@ export function part1() {
         const i1 = locations[n][0] - di;
         const j1 = locations[n][1] - dj;
 
-        const antinode1 = toKey(i1, j1);
+        const antinode1 = toKey([i1, j1]);
 
         if (map[i1]?.[j1]) {
           antinodes.add(antinode1);
@@ -56,7 +58,7 @@ export function part1() {
         const i2 = locations[m][0] + di;
         const j2 = locations[m][1] + dj;
 
-        const antinode2 = toKey(i2, j2);
+        const antinode2 = toKey([i2, j2]);
 
         if (map[i2]?.[j2]) {
           antinodes.add(antinode2);
@@ -85,7 +87,7 @@ export function part2() {
         let j1 = locations[n][1] - dj;
 
         while (map[i1]?.[j1]) {
-          antinodes.add(toKey(i1, j1));
+          antinodes.add(toKey([i1, j1]));
 
           i1 -= di;
           j1 -= dj;
@@ -97,7 +99,7 @@ export function part2() {
         let j2 = locations[m][1] + dj;
 
         while (map[i2]?.[j2]) {
-          antinodes.add(toKey(i2, j2));
+          antinodes.add(toKey([i2, j2]));
 
           i2 += di;
           j2 += dj;
@@ -105,19 +107,11 @@ export function part2() {
 
         // NOTE - Antennae themselves.
 
-        antinodes.add(toKey(locations[n][0], locations[n][1]));
-        antinodes.add(toKey(locations[m][0], locations[m][1]));
+        antinodes.add(toKey([locations[n][0], locations[n][1]]));
+        antinodes.add(toKey([locations[m][0], locations[m][1]]));
       }
     }
   }
 
   return antinodes.size;
-}
-
-function toKey(i: number, j: number) {
-  return `${i}|${j}`;
-}
-
-function fromKey(key: string) {
-  return key.split("|").map(Number);
 }
