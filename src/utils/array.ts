@@ -1,6 +1,14 @@
 declare global {
   interface Array<T> {
     /**
+     * Calculates the maximum value in an array of numbers.
+     *
+     * @param {number[]} this The array of values.
+     * @return {number} The maximum value, or 0 if the array is empty.
+     */
+    max(this: number[]): number;
+
+    /**
      * Calculates the sum of an array of numbers.
      *
      * @param {number[]} this The array of values.
@@ -29,6 +37,12 @@ declare global {
     toLookup<K, V>(this: V[], keySelector: (value: V) => K): Map<K, V>;
   }
 }
+
+Object.defineProperty(Array.prototype, "max", {
+  value: function max(this: number[]) {
+    return this.reduce((max, value) => (value > max ? value : max), 0);
+  },
+});
 
 Object.defineProperty(Array.prototype, "sum", {
   value: function sum(this: number[]) {
