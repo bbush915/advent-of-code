@@ -28,9 +28,9 @@ describe("2024 Day 22", function () {
   });
 
   describe("Part 2", function () {
-    it("should calculate the correct answer for the first example", function () {
+    it("should calculate the correct answer for the second example", function () {
       const input = fs.readFileSync(
-        "./src/inputs/2024/22/day.22.example.01.txt"
+        "./src/inputs/2024/22/day.22.example.02.txt"
       );
 
       jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
