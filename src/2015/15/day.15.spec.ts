@@ -8,17 +8,17 @@ describe("2015 Day 15", function () {
   });
 
   describe("Part 1", function () {
-    // it("should calculate the correct answer for the first example", function () {
-    //   const input = fs.readFileSync(
-    //     "./src/inputs/2015/15/day.15.example.01.txt"
-    //   );
+    it("should calculate the correct answer for the first example", function () {
+      const input = fs.readFileSync(
+        "./src/inputs/2015/15/day.15.example.01.txt"
+      );
 
-    //   jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
+      jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
 
-    //   const answer = part1();
+      const answer = part1();
 
-    //   expect(answer).toBe(62842880);
-    // });
+      expect(answer).toBe(62842880);
+    });
 
     it("should calculate the correct answer for the challenge", function () {
       const answer = part1();
@@ -28,15 +28,17 @@ describe("2015 Day 15", function () {
   });
 
   describe("Part 2", function () {
-    // it("should calculate the correct answer for the first example", function () {
-    //   const input = fs.readFileSync("./src/inputs/2015/15/day.15.example.01.txt");
+    it("should calculate the correct answer for the first example", function () {
+      const input = fs.readFileSync(
+        "./src/inputs/2015/15/day.15.example.01.txt"
+      );
 
-    //   jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
+      jest.spyOn(fs, "readFileSync").mockImplementation(() => input);
 
-    //   const answer = part2();
+      const answer = part2();
 
-    //   expect(answer).toBe(57600000);
-    // });
+      expect(answer).toBe(57600000);
+    });
 
     it("should calculate the correct answer for the challenge", function () {
       const answer = part2();
