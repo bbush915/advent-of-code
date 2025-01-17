@@ -4,9 +4,17 @@ declare global {
      * Calculates the maximum value in an array of numbers.
      *
      * @param {number[]} this The array of values.
-     * @return {number} The maximum value, or 0 if the array is empty.
+     * @return {number} The maximum value, or Number.NEGATIVE_INFINITY if the array is empty.
      */
     max(this: number[]): number;
+
+    /**
+     * Calculates the minimum value in an array of numbers.
+     *
+     * @param {number[]} this The array of values.
+     * @return {number} The minimum value, or Number.POSITIVE_INFINITY if the array is empty.
+     */
+    min(this: number[]): number;
 
     /**
      * Calculates the sum of an array of numbers.
@@ -40,7 +48,19 @@ declare global {
 
 Object.defineProperty(Array.prototype, "max", {
   value: function max(this: number[]) {
-    return this.reduce((max, value) => (value > max ? value : max), 0);
+    return this.reduce(
+      (max, value) => (value > max ? value : max),
+      Number.NEGATIVE_INFINITY
+    );
+  },
+});
+
+Object.defineProperty(Array.prototype, "min", {
+  value: function min(this: number[]) {
+    return this.reduce(
+      (min, value) => (value < min ? value : min),
+      Number.POSITIVE_INFINITY
+    );
   },
 });
 
