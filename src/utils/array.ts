@@ -1,20 +1,20 @@
 declare global {
   interface Array<T> {
     /**
-     * Calculates the maximum value in an array of numbers.
-     *
-     * @param {number[]} this The array of values.
-     * @return {number} The maximum value, or Number.NEGATIVE_INFINITY if the array is empty.
-     */
-    max(this: number[]): number;
-
-    /**
      * Calculates the minimum value in an array of numbers.
      *
      * @param {number[]} this The array of values.
      * @return {number} The minimum value, or Number.POSITIVE_INFINITY if the array is empty.
      */
     min(this: number[]): number;
+
+    /**
+     * Calculates the maximum value in an array of numbers.
+     *
+     * @param {number[]} this The array of values.
+     * @return {number} The maximum value, or Number.NEGATIVE_INFINITY if the array is empty.
+     */
+    max(this: number[]): number;
 
     /**
      * Calculates the sum of an array of numbers.
@@ -31,35 +31,23 @@ declare global {
      * @return {number} The product, or 1 if the array is empty.
      */
     product(this: number[]): number;
-
-    /**
-     * Generates a lookup from the given array using the given key selector.
-     *
-     * @template K The key type.
-     * @template V The value type.
-     * @param {V[]} this The array.
-     * @param {(value: V) => K} keySelector The key selector.
-     * @returns {Map<K, T>} The lookup generated from the given array using the given key selector.
-     * @throws Throws if the selected key for a value is not unique.
-     */
-    toLookup<K, V>(this: V[], keySelector: (value: V) => K): Map<K, V>;
   }
 }
-
-Object.defineProperty(Array.prototype, "max", {
-  value: function max(this: number[]) {
-    return this.reduce(
-      (max, value) => (value > max ? value : max),
-      Number.NEGATIVE_INFINITY
-    );
-  },
-});
 
 Object.defineProperty(Array.prototype, "min", {
   value: function min(this: number[]) {
     return this.reduce(
       (min, value) => (value < min ? value : min),
       Number.POSITIVE_INFINITY
+    );
+  },
+});
+
+Object.defineProperty(Array.prototype, "max", {
+  value: function max(this: number[]) {
+    return this.reduce(
+      (max, value) => (value > max ? value : max),
+      Number.NEGATIVE_INFINITY
     );
   },
 });
@@ -73,22 +61,6 @@ Object.defineProperty(Array.prototype, "sum", {
 Object.defineProperty(Array.prototype, "product", {
   value: function product(this: number[]) {
     return this.reduce((product, value) => (product *= value), 1);
-  },
-});
-
-Object.defineProperty(Array.prototype, "toLookup", {
-  value: function toLookup<K, V>(this: V[], keySelector: (value: V) => K) {
-    return this.reduce((lookup, value) => {
-      const key = keySelector(value);
-
-      if (lookup.has(key)) {
-        throw new Error(`Key [${key}] is not unique.`);
-      }
-
-      lookup.set(key, value);
-
-      return lookup;
-    }, new Map<K, V>());
   },
 });
 

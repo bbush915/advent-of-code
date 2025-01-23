@@ -1,6 +1,5 @@
 import fs from "fs";
 
-import "@/utils/array";
 import { isNumeric } from "@/utils/number";
 import { topologicalSort } from "@/utils/graph";
 
@@ -29,10 +28,10 @@ function parseInput() {
     .filter((x) => x)
     .map(parseInstruction);
 
-  const instructionLookup = instructions.toLookup((x) => x.wire);
+  const instructionLookup = Map.groupBy(instructions, (x) => x.wire);
 
   return topologicalSort(buildNeighborLookup(instructions)).map(
-    (wire) => instructionLookup.get(wire)!
+    (wire) => instructionLookup.get(wire)![0]
   );
 }
 

@@ -34,39 +34,6 @@ describe("utils", function () {
       });
     });
 
-    describe("toLookup", function () {
-      it("should throw if key is not unique", function () {
-        const values = [
-          { a: 1, b: 2 },
-          { a: 1, b: 3 },
-        ];
-
-        const act = () => values.toLookup((x) => x.a);
-
-        expect(act).toThrow("Key [1] is not unique.");
-      });
-
-      it("should have the correct size", function () {
-        const values = [
-          { a: 1, b: 2 },
-          { a: 3, b: 4 },
-        ];
-        const lookup = values.toLookup((x) => x.a);
-
-        expect(lookup.size).toBe(2);
-      });
-
-      it("should allow retrieval of value by key", function () {
-        const values = [
-          { a: 1, b: 2 },
-          { a: 3, b: 4 },
-        ];
-        const lookup = values.toLookup((x) => x.a);
-
-        expect(lookup.get(3)).toBe(values[1]);
-      });
-    });
-
     describe("isArray", function () {
       it("should return true for an array", function () {
         expect(isArray([])).toBe(true);
