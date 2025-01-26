@@ -162,3 +162,29 @@ export function upperBound<T>(
 
   return lo ?? -1;
 }
+
+/**
+ * Gets the permutations of the given array.
+ *
+ * @param array  The array.
+ * @returns The permutations of the array.
+ */
+export function getPermutations<T>(array: T[]) {
+  if (array.length <= 1) {
+    return [array];
+  }
+
+  const permutations: T[][] = [];
+
+  for (const permutation of getPermutations(array.slice(1))) {
+    for (let i = 0; i < array.length; i++) {
+      permutations.push([
+        ...permutation.slice(0, i),
+        array[0],
+        ...permutation.slice(i),
+      ]);
+    }
+  }
+
+  return permutations;
+}
