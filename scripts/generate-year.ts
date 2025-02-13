@@ -4,7 +4,14 @@ import fs from "fs";
 
 dotenv.config();
 
-const options = commandLineArgs([{ name: "year", alias: "y", type: Number }]);
+const options = commandLineArgs([
+  {
+    name: "year",
+    alias: "y",
+    type: Number,
+    defaultValue: Number(process.env.YEAR),
+  },
+]);
 
 const { year } = options;
 
