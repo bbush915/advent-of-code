@@ -2,11 +2,11 @@ import { MinPriorityQueue } from "./data-structure";
 
 export type DistanceFunction = (x: string, y: string) => number;
 
-const DefaultGetDistance: DistanceFunction = (_x, _y) => 1;
+export const DefaultGetDistance: DistanceFunction = (_x, _y) => 1;
 
 export type HeuristicFunction = (key: string) => number;
 
-const DefaultGetHeuristic: HeuristicFunction = (_key) => 0;
+export const DefaultGetHeuristic: HeuristicFunction = (_key) => 0;
 
 export function search(
   getNeighbors: (key: string) => string[],
