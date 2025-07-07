@@ -17,6 +17,14 @@ declare global {
     max(this: number[]): number;
 
     /**
+     * Calculates the average value of an array of numbers.
+     *
+     * @param {number[]} this The array of values.
+     * @return {number} The average value, or Number.NaN if the array is empty.
+     */
+    avg(this: number[]): number;
+
+    /**
      * Calculates the sum of an array of numbers.
      *
      * @param {number[]} this The array of values.
@@ -49,6 +57,16 @@ Object.defineProperty(Array.prototype, "max", {
       (max, value) => (value > max ? value : max),
       Number.NEGATIVE_INFINITY
     );
+  },
+});
+
+Object.defineProperty(Array.prototype, "avg", {
+  value: function avg(this: number[]) {
+    if (!this.length) {
+      return Number.NaN;
+    }
+
+    return this.sum() / this.length;
   },
 });
 
