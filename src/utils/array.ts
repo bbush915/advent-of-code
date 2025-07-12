@@ -20,9 +20,17 @@ declare global {
      * Calculates the average value of an array of numbers.
      *
      * @param {number[]} this The array of values.
-     * @return {number} The average value, or Number.NaN if the array is empty.
+     * @return {number} The average value, or null if the array is empty.
      */
     avg(this: number[]): number;
+
+    /**
+     * Calculates the mode of an array of numbers.
+     *
+     * @param {number[]} this The array of values.
+     * @return {number} The average value, or null if the mode does not exist.
+     */
+    mode(this: number[]): number[] | null;
 
     /**
      * Calculates the sum of an array of numbers.
@@ -63,10 +71,28 @@ Object.defineProperty(Array.prototype, "max", {
 Object.defineProperty(Array.prototype, "avg", {
   value: function avg(this: number[]) {
     if (!this.length) {
-      return Number.NaN;
+      return null;
     }
 
     return this.sum() / this.length;
+  },
+});
+
+Object.defineProperty(Array.prototype, "mode", {
+  value: function avg(this: number[]) {
+    if (!this.length) {
+      return null;
+    }
+
+    const counts = this.reduce(
+      (counts, value) => counts.set(value, (counts.get(value) ?? 0) + 1),
+      new Map<number, number>()
+    );
+
+    const sortedCounts = [...counts.entries()].sort((x, y) => y[1] - x[1]);
+    const maxCount = sortedCounts[0][1];
+
+    return sortedCounts.filter((x) => x[1] === maxCount).map((x) => x[0]);
   },
 });
 

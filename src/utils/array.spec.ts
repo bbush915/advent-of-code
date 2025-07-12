@@ -2,6 +2,29 @@ import { cartesian, isArray, lowerBound, range, upperBound } from "./array";
 
 describe("utils", function () {
   describe("array", function () {
+    describe("mode", function () {
+      it("should return the mode of an array of numbers correctly", function () {
+        const values = [1, 2, 2, 2, 3];
+        const mode = values.mode();
+
+        expect(mode).toEqual([2]);
+      });
+
+      it("should return both modes for a multimodal array of numbers", function () {
+        const values: number[] = [1, 1, 2, 3, 3];
+        const mode = values.mode();
+
+        expect(mode).toEqual([1, 3]);
+      });
+
+      it("should return null for an empty array", function () {
+        const values: number[] = [];
+        const mode = values.mode();
+
+        expect(mode).toBeNull();
+      });
+    });
+
     describe("sum", function () {
       it("should add an array of numbers correctly", function () {
         const values = [1, 2, 3, 4, 5];
