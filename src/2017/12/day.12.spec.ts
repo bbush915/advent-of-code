@@ -1,11 +1,11 @@
-import { part1, part2 } from "./day.09";
+import { part1, part2 } from "./day.12";
 
-describe("2017 Day 09", function () {
+describe("2017 Day 12", function () {
   describe("Part 1", function () {
     it("should calculate the correct answer for the challenge", function () {
       const answer = part1();
 
-      expect(answer).toBe(9662);
+      expect(answer).toBe(239);
     });
   });
 
@@ -13,7 +13,7 @@ describe("2017 Day 09", function () {
     it("should calculate the correct answer for the challenge", function () {
       const answer = part2();
 
-      expect(answer).toBe(4903);
+      expect(answer).toBe(215);
     });
   });
 });
