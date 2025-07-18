@@ -232,3 +232,17 @@ export function getPermutations<T>(array: T[]) {
 
   return permutations;
 }
+
+/**
+ * Determines whether the given arrays match.
+ * @param x The first array.
+ * @param y The second array.
+ * @returns A value indicating whether the arrays match.
+ */
+export function matches<T>(x: T[], y: T[]) {
+  if (x.length !== y.length) {
+    return false;
+  }
+
+  return x.every((value, index) => y[index] === value);
+}
