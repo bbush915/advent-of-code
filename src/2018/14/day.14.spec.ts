@@ -5,7 +5,7 @@ describe("2018 Day 14", function () {
     it("should calculate the correct answer for the challenge", function () {
       const answer = part1();
 
-      expect(answer).toBe(6985103122);
+      expect(answer).toBe("6985103122");
     });
   });
 
