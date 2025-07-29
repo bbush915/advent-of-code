@@ -4,9 +4,9 @@ export type DistanceFunction = (x: string, y: string) => number;
 
 export const DefaultGetDistance: DistanceFunction = (_x, _y) => 1;
 
-export type HeuristicFunction = (key: string) => number;
+export type HeuristicFunction = (key: string, target?: string) => number;
 
-export const DefaultGetHeuristic: HeuristicFunction = (_key) => 0;
+export const DefaultGetHeuristic: HeuristicFunction = (_key, _target) => 0;
 
 export function search(
   getNeighbors: (key: string) => string[],
@@ -18,8 +18,8 @@ export function search(
   const distanceLookup = new Map<string, number>();
   distanceLookup.set(source, 0);
 
-  const predecessorLookup = new Map<string, string | null>();
-  predecessorLookup.set(source, null);
+  const predecessorLookup = new Map<string, Set<string>>();
+  predecessorLookup.set(source, new Set<string>());
 
   const priorityQueue = new MinPriorityQueue();
   priorityQueue.insert(source, getHeuristic(source));
@@ -27,20 +27,24 @@ export function search(
   while (priorityQueue.size > 0) {
     const { key } = priorityQueue.pop()!;
 
-    if (key === target) {
-      break;
-    }
-
     for (const neighborKey of getNeighbors(key)) {
       const distance = distanceLookup.get(key)! + getDistance(key, neighborKey);
+      const neighborDistance =
+        distanceLookup.get(neighborKey) ?? Number.POSITIVE_INFINITY;
 
-      if (
-        distance < (distanceLookup.get(neighborKey) ?? Number.POSITIVE_INFINITY)
-      ) {
+      if (distance <= neighborDistance) {
         distanceLookup.set(neighborKey, distance);
-        predecessorLookup.set(neighborKey, key);
 
-        const heuristic = distance + getHeuristic(neighborKey);
+        if (
+          distance < neighborDistance ||
+          !predecessorLookup.has(neighborKey)
+        ) {
+          predecessorLookup.set(neighborKey, new Set<string>());
+        }
+
+        predecessorLookup.get(neighborKey)!.add(key);
+
+        const heuristic = distance + getHeuristic(neighborKey, target);
 
         if (priorityQueue.includes(neighborKey)) {
           priorityQueue.update(neighborKey, heuristic);
@@ -48,6 +52,10 @@ export function search(
           priorityQueue.insert(neighborKey, heuristic);
         }
       }
+    }
+
+    if (key === target) {
+      break;
     }
   }
 
