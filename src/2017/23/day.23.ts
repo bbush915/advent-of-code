@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { isNumeric } from "@/utils/number";
+import { eratosthenes, isNumeric } from "@/utils/number";
 
 type Instruction = {
   type: InstructionTypes;
@@ -108,7 +108,7 @@ export function part1() {
 export function part2() {
   let count = 0;
 
-  const primes = getPrimesBelow(Math.floor(Math.sqrt(126_900)));
+  const primes = eratosthenes(Math.floor(Math.sqrt(126_900)));
 
   for (let n = 109_900; n <= 126_900; n += 17) {
     if (primes.some((x) => n % x === 0)) {
@@ -121,26 +121,4 @@ export function part2() {
 
 function getValue(arg: number | string, registers: Map<string, number>) {
   return isNumeric(arg) ? (arg as number) : registers.get(arg as string)!;
-}
-
-function getPrimesBelow(n: number) {
-  const range = new Array(n + 1).fill(true);
-
-  for (let i = 2; i < Math.sqrt(n); i++) {
-    if (range[i]) {
-      for (let j = i * i; j <= n; j += i) {
-        range[j] = false;
-      }
-    }
-  }
-
-  const primes: number[] = [];
-
-  for (let i = 2; i <= n; i++) {
-    if (range[i]) {
-      primes.push(i);
-    }
-  }
-
-  return primes;
 }

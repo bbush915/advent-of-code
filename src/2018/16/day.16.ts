@@ -1,5 +1,25 @@
 import fs from "fs";
 
+import {
+  addi,
+  addr,
+  bani,
+  banr,
+  bori,
+  borr,
+  eqir,
+  eqri,
+  eqrr,
+  gtir,
+  gtri,
+  gtrr,
+  muli,
+  mulr,
+  OpcodeFn,
+  Registers,
+  seti,
+  setr,
+} from "2018/utils/opcode";
 import { matches } from "@/utils/array";
 import { clone } from "@/utils/common";
 
@@ -10,14 +30,6 @@ type Sample = {
 };
 
 type Instruction = [number, number, number, number];
-
-type Registers = [number, number, number, number];
-
-type OpcodeFn = (
-  registers: Registers,
-  inputs: [number, number],
-  output: number
-) => Registers;
 
 function parseInput() {
   const sections = fs
@@ -162,84 +174,4 @@ function getOpcodeLookup(samples: Sample[]) {
   }
 
   return opcodeLookup;
-}
-
-function addr(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] + registers[inputs[1]];
-  return registers;
-}
-
-function addi(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] + inputs[1];
-  return registers;
-}
-
-function mulr(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] * registers[inputs[1]];
-  return registers;
-}
-
-function muli(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] * inputs[1];
-  return registers;
-}
-
-function banr(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] & registers[inputs[1]];
-  return registers;
-}
-
-function bani(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] & inputs[1];
-  return registers;
-}
-
-function borr(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] | registers[inputs[1]];
-  return registers;
-}
-
-function bori(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] | inputs[1];
-  return registers;
-}
-
-function setr(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]];
-  return registers;
-}
-
-function seti(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = inputs[0];
-  return registers;
-}
-
-function gtir(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = inputs[0] > registers[inputs[1]] ? 1 : 0;
-  return registers;
-}
-
-function gtri(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] > inputs[1] ? 1 : 0;
-  return registers;
-}
-
-function gtrr(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] > registers[inputs[1]] ? 1 : 0;
-  return registers;
-}
-
-function eqir(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = inputs[0] === registers[inputs[1]] ? 1 : 0;
-  return registers;
-}
-
-function eqri(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] === inputs[1] ? 1 : 0;
-  return registers;
-}
-
-function eqrr(registers: Registers, inputs: [number, number], output: number) {
-  registers[output] = registers[inputs[0]] === registers[inputs[1]] ? 1 : 0;
-  return registers;
 }

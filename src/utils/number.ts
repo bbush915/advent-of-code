@@ -153,3 +153,31 @@ export function phi(n: number): number {
 
   return result;
 }
+
+/**
+ * Retrieves all primes less than the given number.
+ *
+ * @param {number} n The number.
+ * @returns {number[]} The primes less than the number.
+ */
+export function eratosthenes(n: number): number[] {
+  const range = new Array(n + 1).fill(true);
+
+  for (let i = 2; i < Math.sqrt(n); i++) {
+    if (range[i]) {
+      for (let j = i * i; j <= n; j += i) {
+        range[j] = false;
+      }
+    }
+  }
+
+  const primes: number[] = [];
+
+  for (let i = 2; i <= n; i++) {
+    if (range[i]) {
+      primes.push(i);
+    }
+  }
+
+  return primes;
+}
