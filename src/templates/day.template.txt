@@ -4,8 +4,8 @@ function parseInput() {
   return fs
     .readFileSync("src/inputs/$$YEAR$$/$$DAY$$/day.$$DAY$$.input.txt")
     .toString()
-    .split("\n")
-    .filter((x) => x)
+    .trim()
+    .split('\n')
     .map((x) => x);
 }
 
