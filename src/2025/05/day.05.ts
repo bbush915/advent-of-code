@@ -28,6 +28,7 @@ export function part1() {
     for (const range of ranges) {
       if (ingredient >= range[0] && ingredient <= range[1]) {
         fresh = true;
+        break;
       }
     }
 
