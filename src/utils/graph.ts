@@ -22,7 +22,7 @@ export function search(
   predecessorLookup.set(source, new Set<string>());
 
   const priorityQueue = new MinPriorityQueue();
-  priorityQueue.insert(source, getHeuristic(source));
+  priorityQueue.insert(source, getHeuristic(source, target));
 
   while (priorityQueue.size > 0) {
     const { key } = priorityQueue.pop()!;
@@ -105,7 +105,7 @@ function topologicalSortVisit(
 
   markLookup.set(key, MarkType.TEMPORARY);
 
-  for (const neighborKey of neighborLookup.get(key)!) {
+  for (const neighborKey of neighborLookup.get(key) ?? []) {
     topologicalSortVisit(neighborKey, neighborLookup, markLookup, results);
   }
 
